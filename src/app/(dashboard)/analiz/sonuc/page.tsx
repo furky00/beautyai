@@ -10,13 +10,13 @@ import type { AnalysisResult } from '@/types'
 export default async function ResultPage({
   searchParams,
 }: {
-  searchParams: { id?: string }
+  searchParams: Promise<{ id?: string }>
 }) {
   const supabase = createServerClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/giris')
 
-  const analysisId = searchParams.id
+  const { id: analysisId } = await searchParams
   if (!analysisId) redirect('/profil')
 
   const { data: analysis } = await supabase
